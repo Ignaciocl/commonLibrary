@@ -1,4 +1,4 @@
-module commonLibrary
+module github.com/Ignaciocl/commonLibrary
 
 go 1.20
 
