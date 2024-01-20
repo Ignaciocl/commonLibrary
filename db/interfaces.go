@@ -2,15 +2,6 @@ package db
 
 import "database/sql"
 
-type StorableDynamo interface {
-	GetTableId() string
-}
-
-type DynamoTable[T StorableDynamo] interface {
-	Put(item T) error
-	Get(hash string) (T, error)
-	Delete(hash string) (T, error)
-}
 type Storable interface {
 	GetPrimaryKey() string
 }

@@ -1,4 +1,4 @@
-package db
+package dynamo
 
 import (
 	"github.com/guregu/dynamo"
@@ -19,6 +19,22 @@ func (d *Dynamo[T]) Get(hash string) (T, error) {
 	var t T
 	err := d.table.Get(t.GetTableId(), hash).One(&t)
 	return t, err
+}
+
+func (d *Dynamo[T]) Scan(query string, valuesToFilter []interface{}) ([]T, error) {
+	results := make([]T, 0)
+	err := d.table.Scan().Filter(query, valuesToFilter).All(&results)
+	return results, err
+}
+
+func (d *Dynamo[T]) QueryBy(parameter string, queryBy interface{}, filter string, valuesToFilter []interface{}) ([]T, error) {
+	query := d.table.Get(parameter, queryBy)
+	if len(valuesToFilter) == 0 && filter == "" {
+		query.Filter(filter, valuesToFilter...)
+	}
+	result := make([]T, 0)
+	err := query.All(&result)
+	return result, err
 }
 
 func (d *Dynamo[T]) Delete(hash string) (T, error) {
