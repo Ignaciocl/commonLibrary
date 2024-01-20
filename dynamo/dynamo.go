@@ -27,9 +27,9 @@ func (d *Dynamo[T]) Scan(query string, valuesToFilter []interface{}) ([]T, error
 	return results, err
 }
 
-func (d *Dynamo[T]) QueryBy(parameter string, queryBy interface{}, filter string, valuesToFilter []interface{}) ([]T, error) {
-	query := d.table.Get(parameter, queryBy)
-	if len(valuesToFilter) == 0 && filter == "" {
+func (d *Dynamo[T]) QueryBy(parameter string, queryBy interface{}, indexName, filter string, valuesToFilter []interface{}) ([]T, error) {
+	query := d.table.Get(parameter, queryBy).Index(indexName)
+	if len(valuesToFilter) != 0 || filter != "" {
 		query.Filter(filter, valuesToFilter...)
 	}
 	result := make([]T, 0)
