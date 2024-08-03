@@ -20,7 +20,7 @@ type FilterData struct {
 type RangeData struct {
 	RangeName  string
 	RangeValue []interface{}
-	operator   dynamo.Operator
+	Operator   dynamo.Operator
 }
 
 func (d *Dynamo[T]) Put(item T) error {
@@ -54,7 +54,7 @@ func (d *Dynamo[T]) QueryBy(parameter string, queryBy interface{}, indexName str
 		query.Filter(filter.FilterQuery, filter.FilterValues...)
 	}
 	if rangeData != nil {
-		query.Range(rangeData.RangeName, rangeData.operator, rangeData.RangeValue...)
+		query.Range(rangeData.RangeName, rangeData.Operator, rangeData.RangeValue...)
 	}
 	if asc != nil {
 		query.Order(dynamo.Order(*asc))
